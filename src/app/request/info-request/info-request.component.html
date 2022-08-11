@@ -1,0 +1,81 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+	<div fxFlex="95%">
+		<mat-card>
+			<mat-card-content style="padding: 10px;">
+				<h2 style="margin-top: 5px; margin-bottom: 32px;">Información de la solicitud:</h2>
+
+				<form>
+					<mat-form-field class="example-full-width" style="width: 275px; margin-right: 24px;">
+						<mat-label>ID</mat-label>
+						<input matInput value="{{ request.id }}" disabled />
+					</mat-form-field>
+
+					<mat-form-field class="example-full-width" style="margin-right: 24px;">
+						<mat-label>Categoría</mat-label>
+						<input matInput value="{{ topicType.name }}" disabled />
+					</mat-form-field>
+
+					<mat-form-field class="example-full-width" style="margin-right: 24px;">
+						<mat-label>Fecha de envío</mat-label>
+						<input matInput value="{{ request.date }}" disabled />
+					</mat-form-field>
+
+					<mat-form-field class="example-full-width" style="margin-right: 24px;">
+						<mat-label>Nombre del solicitante</mat-label>
+						<input matInput value="{{ request.applicant.name }}" disabled />
+					</mat-form-field>
+
+					<mat-form-field class="example-full-width" style="margin-right: 24px;">
+						<mat-label>Correo del solicitante</mat-label>
+						<input matInput value="{{ request.applicant.email }}" disabled />
+					</mat-form-field>
+
+					<mat-form-field *ngIf="request.applicant.phoneNumber" class="example-full-width">
+						<mat-label>Teléfono del solicitante</mat-label>
+						<input matInput value="{{ request.applicant.phoneNumber }}" disabled />
+					</mat-form-field>
+
+					<br />
+
+					<mat-form-field appearance="fill" style="width: 100%; margin-top: 20px;">
+						<mat-label>Descripción:</mat-label>
+						<textarea
+							matInput
+							cdkTextareaAutosize
+							#autosize="cdkTextareaAutosize"
+							cdkAutosizeMinRows="1.5"
+							cdkAutosizeMaxRows="20"
+							style="font-size: 14px; padding-top: 10px; max-height: 300px; min-height: 30px;"
+							matTooltip="Máximo 2000 caracteres"
+							disabled
+							value="{{ request.details }}"
+						></textarea>
+					</mat-form-field>
+
+					<h3 style="margin-top: 10px; margin-bottom: 30px;">Campos adicionales:</h3>
+
+					<ng-container *ngIf="request.additionalFields">
+						<ng-container *ngFor="let af of request.additionalFields">
+							<mat-form-field class="example-full-width" style="margin-right: 24px;">
+								<mat-label>{{ af.name }}</mat-label>
+								<input matInput value="{{ af.data }}" disabled />
+							</mat-form-field>
+						</ng-container>
+					</ng-container>
+
+					<h3 style="margin-top: 10px; margin-bottom: 30px;">Estado de la solicitud:</h3>
+
+					<mat-form-field class="example-full-width" style="width: 275px; margin-right: 24px;">
+						<mat-label>Estado</mat-label>
+						<input matInput value="{{ request.status }}" disabled />
+					</mat-form-field>
+
+					<mat-form-field *ngIf="request.statusDescription" class="example-full-width" style="width: 275px; margin-right: 24px;">
+						<mat-label>Descripción</mat-label>
+						<input matInput value="{{ request.statusDescription }}" disabled />
+					</mat-form-field>
+				</form>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

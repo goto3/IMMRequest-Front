@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Editar usario administrador</h1>
+<br />
+
+<form [formGroup]="editUserForm" (ngSubmit)="editUser()">
+	<mat-form-field style="margin-right: 30px;">
+		<mat-label>Nombre</mat-label>
+		<input matInput #first formControlName="name" />
+	</mat-form-field>
+
+	<mat-form-field style="margin-right: 30px;">
+		<mat-label>Correo electrónico</mat-label>
+		<input type="email" matInput #first formControlName="email" />
+	</mat-form-field>
+
+	<mat-form-field style="margin-right: 30px;">
+		<mat-label>Contraseña nueva</mat-label>
+		<input matInput #first formControlName="password" />
+	</mat-form-field>
+
+	<button mat-raised-button color="primary" [disabled]="editUserForm.invalid" type="submit" style="width: 300px; height: 48px; font-size: 18px; margin-top: 30px;">
+		Guardar
+	</button>
+</form>

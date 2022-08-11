@@ -1,0 +1,19 @@
+<ng-container [ngSwitch]="data.type">
+	<ng-container *ngSwitchCase="'NEW_REQUEST'">
+		<h1 mat-dialog-title>Solicitud creada exitosamente.</h1>
+		<br />
+		<div mat-dialog-content>
+			Para realizar el seguimiento de la solicitud, utiliza el número <b>{{ data.info }}</b>
+		</div>
+		<a mat-raised-button href="/requests/details/{{ data.info }}" target="_blank" color="primary" style="float: right; margin-top: 15px;">Ver solicitud</a>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'NEW_TOPICTYPE'">
+		<h1 mat-dialog-title>Tipo creado exitosamente.</h1>
+		<br />
+		<div mat-dialog-content>
+			Ya se puede utilizar el tipo para crear nuevas solicitudes. Tipo ID: <b>{{ data.info }}</b>
+		</div>
+		<a mat-raised-button (click)="closeMe()" target="_blank" color="primary" style="float: right; margin-top: 15px;">OK</a>
+	</ng-container>
+</ng-container>

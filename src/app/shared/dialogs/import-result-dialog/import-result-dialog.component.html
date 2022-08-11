@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Datos importados exitosamente:</h1>
+<br />
+
+<p *ngIf="data.areas.length == 0">No se pudieron importar los datos, verifique los campos ingresados.</p>
+
+<mat-accordion>
+	<mat-expansion-panel *ngFor="let area of data.areas; let i = index" style="min-width: 800px;">
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				<p>
+					<b>Area {{ i + 1 }}:</b> {{ area.name }}
+				</p>
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+		<mat-accordion>
+			<mat-expansion-panel *ngFor="let topic of area.topics; let j = index" style="margin-bottom: 25px; margin-top: 15px; background-color: #ededed;">
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<p>
+							<b>Tema {{ j + 1 }}:</b> {{ topic.name }}
+						</p>
+					</mat-panel-title>
+				</mat-expansion-panel-header>
+
+				<ngContainer *ngFor="let topicType of topic.topicTypes; let k = index">
+					<p>
+						<b>Tipo {{ k + 1 }}:</b> {{ topicType.name }}
+					</p>
+				</ngContainer>
+			</mat-expansion-panel>
+		</mat-accordion>
+	</mat-expansion-panel>
+
+	<a mat-raised-button (click)="closeMe()" target="_blank" color="primary" style="float: right; margin-top: 15px;">OK</a>
+</mat-accordion>

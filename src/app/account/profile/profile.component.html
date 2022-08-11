@@ -1,0 +1,52 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+	<div fxFlex="95%">
+		<mat-card>
+			<mat-card-content style="padding: 10px;">
+				<h2 style="margin-top: 5px; margin-bottom: 32px;">Perfil:</h2>
+
+				<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column">
+					<div fxFlex="30%" fxFlex.sm="95%" fxFlex.xs="95%">
+						<app-profile-details></app-profile-details>
+					</div>
+
+					<div fxFlex></div>
+
+					<div fxFlex="65%" fxFlex.sm="95%" fxFlex.xs="950%">
+						<mat-tab-group>
+							<mat-tab label="Editar datos">
+								<div style="padding-top: 30px;">
+									<form [formGroup]="editUserForm" (ngSubmit)="sendForm()">
+										<mat-form-field style="margin-right: 30px;">
+											<mat-label>Nombre</mat-label>
+											<input matInput #first formControlName="name" />
+										</mat-form-field>
+
+										<mat-form-field style="margin-right: 30px;">
+											<mat-label>Correo electrónico</mat-label>
+											<input type="email" matInput #first formControlName="email" />
+										</mat-form-field>
+
+										<mat-form-field style="margin-right: 30px;">
+											<mat-label>Contraseña nueva</mat-label>
+											<input matInput #first formControlName="password" />
+										</mat-form-field>
+
+										<button
+											mat-raised-button
+											color="primary"
+											[disabled]="editUserForm.invalid"
+											type="submit"
+											style="width: 300px; height: 48px; font-size: 18px; margin-top: 30px;"
+										>
+											Guardar
+										</button>
+									</form>
+								</div>
+							</mat-tab>
+						</mat-tab-group>
+					</div>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

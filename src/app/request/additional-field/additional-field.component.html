@@ -1,0 +1,43 @@
+<mat-form-field [formGroup]="form" style="margin-right: 10px; margin-left: 10px; vertical-align: bottom;">
+	<mat-label>{{ field.name }}</mat-label>
+
+	<ng-container [ngSwitch]="field.fieldType">
+		<ng-container *ngSwitchCase="'Text'">
+			<input matInput *ngIf="!field.possibleValues" [formControlName]="field.id" />
+			<mat-select *ngIf="field.possibleValues && field.multiple == 'True'" [formControlName]="field.id" multiple>
+				<mat-option *ngFor="let pv of field.possibleValues" [value]="pv">{{ pv }}</mat-option>
+			</mat-select>
+			<mat-select *ngIf="field.possibleValues && field.multiple == 'False'" [formControlName]="field.id">
+				<mat-option *ngFor="let pv of field.possibleValues" [value]="pv">{{ pv }}</mat-option>
+			</mat-select>
+		</ng-container>
+		<ng-container *ngSwitchCase="'Integer'">
+			<input matInput *ngIf="!field.possibleValues" type="number" [formControlName]="field.id" />
+			<input
+				matInput
+				*ngIf="field.possibleValues"
+				type="number"
+				[formControlName]="field.id"
+				[errorStateMatcher]="matcher"
+				matTooltip="Valor entre {{ field.possibleValues[0] }} y {{ field.possibleValues[1] }}"
+			/>
+			<mat-error style="position: absolute; top: 28px; right: 40px;" *ngIf="field.possibleValues && form.controls[field.id].hasError('Range')"> No pertenece al rango </mat-error>
+		</ng-container>
+		<ng-container *ngSwitchCase="'Date'">
+			<input *ngIf="!field.possibleValues" matInput [formControlName]="field.id" [matDatepicker]="picker" style="width: 140px;" />
+			<input *ngIf="field.possibleValues" matInput [formControlName]="field.id" [matDatepicker]="picker" style="width: 140px;" [min]="minDate" [max]="maxDate" />
+			<mat-datepicker-toggle matSuffix [for]="picker" style="position: absolute; top: -8px; right: -8px;"></mat-datepicker-toggle>
+			<mat-datepicker #picker> </mat-datepicker>
+		</ng-container>
+		<ng-container *ngSwitchCase="'Bool'">
+			<mat-select [formControlName]="field.id">
+				<mat-option value="True">
+					Si
+				</mat-option>
+				<mat-option value="False">
+					No
+				</mat-option>
+			</mat-select>
+		</ng-container>
+	</ng-container>
+</mat-form-field>

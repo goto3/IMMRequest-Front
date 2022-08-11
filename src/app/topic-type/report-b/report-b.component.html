@@ -1,0 +1,55 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+	<div fxFlex="95%">
+		<mat-card>
+			<mat-card-content style="padding: 10px;">
+				<h2 style="margin-top: 5px; margin-bottom: 28px;">Reporte de tipo B:</h2>
+
+				<form [formGroup]="reportBForm" (ngSubmit)="submitSearch()">
+					<mat-form-field style="width: 200px; margin-right: 20px;">
+						<input matInput formControlName="dt1" placeholder="Fecha de inicio" [max]="dateMax" [matDatepicker]="picker1" />
+						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+						<mat-datepicker #picker1> </mat-datepicker>
+					</mat-form-field>
+
+					<mat-form-field style="width: 200px; margin-right: 20px;">
+						<input matInput formControlName="dt2" placeholder="Fecha de fin" [max]="dateMax" [matDatepicker]="picker2" />
+						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+						<mat-datepicker #picker2> </mat-datepicker>
+					</mat-form-field>
+
+					<button mat-raised-button color="primary" [disabled]="reportBForm.invalid" type="submit" style="width: 118px; height: 32px; font-size: 14px;">
+						Buscar
+					</button>
+
+					<br />
+
+					<table *ngIf="reportBData.data.length > 0" mat-table [dataSource]="reportBData" class="mat-elevation-z8">
+						<ng-container matColumnDef="id">
+							<th mat-header-cell *matHeaderCellDef style="width: 100%;">Id</th>
+							<td mat-cell *matCellDef="let tt">{{ tt.id }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="name">
+							<th mat-header-cell *matHeaderCellDef style="min-width: 280px;">Nombre</th>
+							<td mat-cell *matCellDef="let tt">{{ tt.name }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="date">
+							<th mat-header-cell *matHeaderCellDef style="min-width: 180px;">Fecha de creación</th>
+							<td mat-cell *matCellDef="let tt">{{ tt.date }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="quantity">
+							<th mat-header-cell *matHeaderCellDef style="min-width: 75px;">Cantidad de solicitudes</th>
+							<td mat-cell *matCellDef="let tt">{{ tt.requestNumber }}</td>
+						</ng-container>
+
+						<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+					</table>
+					<mat-paginator *ngIf="reportBData.data.length > 0" [pageSize]="5" [pageSizeOptions]="[5, 10, 30]"> </mat-paginator>
+				</form>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

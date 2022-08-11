@@ -1,0 +1,25 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+	<div fxFlex="95%">
+		<mat-card>
+			<mat-card-content style="padding: 10px;">
+				<h2 style="margin-top: 5px; margin-bottom: 32px;">Consultar solicitud:</h2>
+
+				<mat-form-field appearance="fill" style="width: 340px; margin-right: 25px;">
+					<mat-label>Código</mat-label>
+					<input matInput [(ngModel)]="requestId" />
+				</mat-form-field>
+
+				<a mat-raised-button color="primary" href="/requests/details/{{ requestId }}" style="width: 125px; bottom: 8px;">Consultar</a>
+
+				<br />
+				<ng-container *ngIf="idList.length > 0">
+					<h3 style="margin-top: 40px; margin-bottom: 20px; margin-right: 20px; display: inline-block;">Creadas recientemente:</h3>
+
+					<button mat-mini-fab color="warn" (click)="deleteRequests()"><mat-icon>delete</mat-icon></button>
+					<br />
+					<a *ngFor="let req of idList" mat-raised-button href="/requests/details/{{ req }}" target="_blank" style="margin-right: 15px; margin-bottom: 15px;">{{ req }}</a>
+				</ng-container>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

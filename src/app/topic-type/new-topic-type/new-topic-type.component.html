@@ -1,0 +1,149 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+	<div fxFlex="95%">
+		<mat-card>
+			<mat-card-content style="padding: 10px;">
+				<h2 style="margin-top: 5px; margin-bottom: 28px;">Crear un tipo:</h2>
+				<form [formGroup]="newTTForm" (ngSubmit)="sendNewTT()" #f="ngForm">
+					<table style="width: 100%; margin-bottom: 5px;">
+						<tr>
+							<th><h3>Área:</h3></th>
+							<th><h3>Tema:</h3></th>
+						</tr>
+						<tr>
+							<td style="width: 50%; vertical-align: top;">
+								<mat-button-toggle-group #group="matButtonToggleGroup" vertical>
+									<mat-button-toggle *ngFor="let area of areas" (click)="areaSelected(area)" [value]="area">{{ area.name }}</mat-button-toggle>
+								</mat-button-toggle-group>
+							</td>
+							<td *ngIf="showTopics" style="width: 50%; vertical-align: top;">
+								<mat-button-toggle-group #group="matButtonToggleGroup" vertical>
+									<mat-button-toggle *ngFor="let topic of topics" (click)="topicSelected(topic)" [value]="topic">{{ topic.name }}</mat-button-toggle>
+								</mat-button-toggle-group>
+							</td>
+						</tr>
+					</table>
+					<mat-form-field style="margin-right: 30px; display: block; width: 200px; margin-bottom: 10px;">
+						<mat-label>Nombre del tipo</mat-label>
+						<input matInput #first formControlName="name" />
+					</mat-form-field>
+
+					<h3 style="margin-bottom: 28px; margin-right: 20px; display: inline-block;">Campos adicionales:</h3>
+
+					<button mat-raised-button color="primary" type="button" style="width: 95px; height: 32px; font-size: 14px;" [disabled]="checkNewAFDisabled()" (click)="addNewAF()">
+						Nuevo
+					</button>
+					<br />
+					<ng-container *ngIf="newTTForm.get('additionalFields')">
+						<ng-container *ngFor="let field of newTTForm.get('additionalFields').controls; let i = index" formArrayName="additionalFields">
+							<div class="mat-card">
+								<h4 style="margin-bottom: 5px; margin-right: 0px; display: inline-block;">Campo adicional {{ i + 1 }}:</h4>
+								<button mat-icon-button color="warn" type="button" (click)="deleteAF(i)">
+									<mat-icon>delete</mat-icon>
+								</button>
+								<div [formGroupName]="i">
+									<mat-form-field style="margin-right: 30px; display: inline-block; width: 200px;">
+										<mat-label>Nombre</mat-label>
+										<input matInput #first formControlName="name" />
+									</mat-form-field>
+									<mat-form-field style="margin-right: 30px; display: inline-block; width: 150px;">
+										<mat-label>Tipo de dato</mat-label>
+										<mat-select (selectionChange)="cleanPossibleValues(field.controls['possibleValues'])" formControlName="fieldType">
+											<mat-option value="Text">Texto</mat-option>
+											<mat-option value="Bool">Booleano</mat-option>
+											<mat-option value="Date">Fecha</mat-option>
+											<mat-option value="Integer">Numérico</mat-option>
+										</mat-select>
+									</mat-form-field>
+									<mat-form-field
+										*ngIf="field.controls.possibleValues.length > 0 && field.controls.fieldType.value == 'Text'"
+										style="margin-right: 30px; display: inline-block; width: 150px;"
+									>
+										<mat-label>Admite valores múltiples</mat-label>
+										<mat-select formControlName="multiple">
+											<mat-option value="True">Si</mat-option>
+											<mat-option value="False">No</mat-option>
+										</mat-select>
+									</mat-form-field>
+									<br />
+									<ng-container *ngIf="field.controls.fieldType.value == 'Text'">
+										<h5 style="margin-bottom: 5px; margin-right: 0px; display: inline-block;">Valores posibles:</h5>
+										<button mat-icon-button color="green" type="button" (click)="addNewPossibleValue(field.controls.possibleValues)">
+											<mat-icon>add</mat-icon>
+										</button>
+										<br />
+										<ng-container *ngFor="let pv of field.get('possibleValues').controls; let j = index" formArrayName="possibleValues">
+											<div style="display: inline-block;">
+												<mat-form-field style="margin-right: 0px; display: inline-block; width: 100px;">
+													<mat-label>Valor posible {{ j + 1 }}</mat-label>
+													<input matInput #first [formControlName]="j" />
+												</mat-form-field>
+												<button mat-icon-button color="warn" type="button" (click)="deletePossibleValue(field.controls.possibleValues, j)" style="margin-right: 15px;">
+													<mat-icon>remove</mat-icon>
+												</button>
+											</div>
+										</ng-container>
+									</ng-container>
+									<ng-container *ngIf="field.controls.fieldType.value == 'Date' || field.controls.fieldType.value == 'Integer'">
+										<h5 style="margin-bottom: 5px; margin-right: 0px; display: inline-block;">Valores posibles:</h5>
+										<button
+											*ngIf="field.get('possibleValues').controls.length == 0"
+											mat-icon-button
+											color="green"
+											type="button"
+											(click)="addNewPossibleValueRange(field.controls.possibleValues)"
+										>
+											<mat-icon>add</mat-icon>
+										</button>
+										<button
+											*ngIf="field.get('possibleValues').controls.length > 0"
+											mat-icon-button
+											color="green"
+											type="button"
+											(click)="deletePossibleValueRange(field.controls.possibleValues)"
+										>
+											<mat-icon>remove</mat-icon>
+										</button>
+										<br />
+										<ng-container *ngIf="field.controls.possibleValues.length > 0" formArrayName="possibleValues">
+											<div style="display: inline-block;">
+												<ng-container *ngIf="field.controls.fieldType.value == 'Integer'">
+													<mat-form-field style="margin-right: 10px; display: inline-block; width: 100px;">
+														<mat-label>Rango mínimo</mat-label>
+														<input matInput formControlName="0" />
+													</mat-form-field>
+													<mat-form-field style="margin-right: 0px; display: inline-block; width: 100px;">
+														<mat-label>Rango máximo</mat-label>
+														<input matInput formControlName="1" />
+													</mat-form-field>
+												</ng-container>
+												<ng-container *ngIf="field.controls.fieldType.value == 'Date'">
+													<mat-form-field style="margin-right: 30px; display: inline-block; width: 140px;">
+														<mat-label>Fecha mínima</mat-label>
+														<input matInput formControlName="0" [matDatepicker]="picker1" />
+														<mat-datepicker-toggle matSuffix [for]="picker1" style="position: absolute; top: -14px; right: 0px;"></mat-datepicker-toggle>
+														<mat-datepicker #picker1> </mat-datepicker>
+													</mat-form-field>
+													<mat-form-field style="display: inline-block; width: 140px;">
+														<mat-label>Fecha máxima</mat-label>
+														<input matInput formControlName="1" [matDatepicker]="picker2" />
+														<mat-datepicker-toggle matSuffix [for]="picker2" style="position: absolute; top: -14px; right: 0px;"></mat-datepicker-toggle>
+														<mat-datepicker #picker2> </mat-datepicker>
+													</mat-form-field>
+												</ng-container>
+											</div>
+										</ng-container>
+									</ng-container>
+								</div>
+							</div>
+							<br />
+						</ng-container>
+					</ng-container>
+					<br />
+					<button mat-raised-button color="primary" [disabled]="newTTForm.invalid || !topic" type="submit" style="width: 300px; height: 48px; font-size: 18px;">
+						Enviar
+					</button>
+				</form>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>
